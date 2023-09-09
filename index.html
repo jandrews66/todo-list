@@ -8,6 +8,48 @@
     <script src="main.js" defer></script>
 </head>
 <body>
-    <div id="content"></div>
+    <div id="header">
+        <h1>Todo List</h1>
+    </div>
+    <div id="content">
+        <form id="createProject">
+            <ul>
+                <li>
+                    <label for="project_name">Todo:</label>
+                    <input type="text" id="project_name" name="project_name" required>
+                </li>
+                <li>
+                    <button type="submit" id="submit_btn">Create</button>
+                </li>
+            </ul>
+
+        </form>
+        <ul id="project-list"></ul>
+        <form id="form">
+            <ul>
+                <li>
+                    <label for="todo_title">Todo:</label>
+                    <input type="text" id="todo_title" name="todo_title" required>
+                </li>
+                <li>
+                    <label for="todo_details">Details:</label>
+                    <input type="text" id="todo_details" name="todo_details" required>
+                </li>
+                <li>
+                    <label for="due_date">Due Date:</label>
+                    <input type="text" id="due_date" name="due_date" required>
+                </li>
+                <li>
+                    <label for="priority">Priority:</label>
+                    <input type="text" id="priority" name="priority" required>
+                </li>
+                <li>
+                    <button type="submit" id="submit_btn">Create</button>
+                </li>
+            </ul>
+
+        </form>
+        <ul id="todo-list"></ul>
+    </div>
 </body>
 </html>
