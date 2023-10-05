@@ -12,10 +12,10 @@
         <h1>Todo List</h1>
     </div>
     <div id="content">
-        <form id="createProject">
+        <form id="project-form">
             <ul>
                 <li>
-                    <label for="project_name">Todo:</label>
+                    <label for="project_name">Project Name:</label>
                     <input type="text" id="project_name" name="project_name" required>
                 </li>
                 <li>
@@ -25,15 +25,15 @@
 
         </form>
         <ul id="project-list"></ul>
-        <form id="form">
+        <form id="task-form">
             <ul>
                 <li>
-                    <label for="todo_title">Todo:</label>
-                    <input type="text" id="todo_title" name="todo_title" required>
+                    <label for="task_title">Task:</label>
+                    <input type="text" id="task_title" name="task_title" required>
                 </li>
                 <li>
-                    <label for="todo_details">Details:</label>
-                    <input type="text" id="todo_details" name="todo_details" required>
+                    <label for="task_details">Details:</label>
+                    <input type="text" id="task_details" name="task_details" required>
                 </li>
                 <li>
                     <label for="due_date">Due Date:</label>
@@ -49,6 +49,7 @@
             </ul>
 
         </form>
+        <h3 id="selected-project"></h3>
         <ul id="todo-list"></ul>
     </div>
 </body>
