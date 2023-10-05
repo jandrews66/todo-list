@@ -1,4 +1,4 @@
-import { selectedProject } from './project.js';
+import { selectedProject, projectArray } from './project.js';
 import { taskFactory } from './task.js'
 
 
@@ -30,10 +30,17 @@ function renderProjects(){
         projectItem.id = project.name
         projectItem.innerHTML = project.name
         projectList.appendChild(projectItem);
-        ///createDeleteBtn(taskItem)
+        ///createDeleteBtn()
     });
 }
 
+const projHeading = document.getElementById("selected-project")
+
+function changeProject(project){
+    projHeading.innerHTML = project.name
+    selectedProject = project
+    renderTasks(selectedProject.array)
+}
 
 function createDeleteBtn(item) {
 
@@ -56,4 +63,6 @@ function deleteTask(toRemove){
 }
 
 
-export {renderTasks, renderProjects}
+
+
+export {renderTasks, renderProjects, changeProject}
