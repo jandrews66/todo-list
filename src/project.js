@@ -1,4 +1,4 @@
-import { renderTasks, renderProjects, changeProject } from './dom.js'
+import { renderProjects, changeProject } from './dom.js'
 
 
 const projectArray = [];
@@ -10,8 +10,8 @@ const projectFactory = (name) => {
     const array = [];
     project.name = name;
     project.array = array
-    const addProject = () => projectArray.push(project)
-    addProject()
+
+    projectArray.push(project)
     changeProject(project)
     return { 
         name, 
@@ -33,6 +33,7 @@ function createProjects(){
 }
 
 const defaultProject = projectFactory("default");
+renderProjects();
 
 export {
     selectedProject,
