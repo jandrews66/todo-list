@@ -1,13 +1,18 @@
 import { selectedProject } from './project.js';
 import { renderTasks } from './dom.js'
-
+import { format, parseISO } from "date-fns"
 
 const taskFactory = (title, details, dueDate, priority, project) => {
 
     let task = {};
     task.title = title
     task.details = details
-    task.dueDate = dueDate
+    //change dueDate format - e.g, 08-Mar
+    const convertDate = function(dateString){
+        const date = (format(parseISO(dateString), "dd-MMM"));
+        return date
+    }
+    task.dueDate = convertDate(dueDate)
     task.priority = priority
 
     project.push(task)
