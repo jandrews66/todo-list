@@ -19,10 +19,10 @@ const projectFactory = (name) => {
 
     }
 }
+const projectForm = document.getElementById('project-form')
 
 function createProjects(){
 
-    const projectForm = document.getElementById('project-form')
     projectForm.addEventListener("submit", (e) => {
         e.preventDefault();
         projectFactory(project_name.value)
@@ -38,5 +38,6 @@ renderProjects();
 export {
     selectedProject,
     createProjects,
-    projectArray
+    projectArray,
+    projectForm
 }

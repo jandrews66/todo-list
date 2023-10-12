@@ -1,4 +1,28 @@
-import { selectedProject, projectArray } from './project.js';
+import { selectedProject, projectArray, projectForm } from './project.js';
+
+const openProjBtn = document.getElementById("openProjModal");
+const closeProjBtn = document.getElementById("closeProjModal");
+const projModal = document.getElementById("projModal")
+
+openProjBtn.addEventListener("click", () => {
+    projModal.classList.add("open")
+});
+
+closeProjBtn.addEventListener("click", () => {
+    projModal.classList.remove("open")
+});
+
+const openTaskBtn = document.getElementById("openTaskModal");
+const closeTaskBtn = document.getElementById("closeTaskModal");
+const taskModal = document.getElementById("taskModal")
+
+openTaskBtn.addEventListener("click", () => {
+    taskModal.classList.add("open")
+});
+
+closeTaskBtn.addEventListener("click", () => {
+    taskModal.classList.remove("open")
+});
 
 const todoList = document.getElementById("todo-list")
 
@@ -29,6 +53,7 @@ function renderProjects(){
         projectItem.innerHTML = project.name
         projectList.appendChild(projectItem);
         createDeleteBtn(projectItem)
+        createEditBtn(projectItem)
     });
 }
 
@@ -54,6 +79,28 @@ function createDeleteBtn(item) {
             deleteProject(item)
         }
     })
+}
+
+function createEditBtn(item) {
+
+    const editBtn = document.createElement("button")
+    editBtn.innerHTML = "Edit"
+    editBtn.classList.add("edit-btn")
+    item.appendChild(editBtn)
+    
+    editBtn.addEventListener('click', function(e) {
+        // if (e.target.closest("ul").id == "todo-list"){
+        //     deleteTask(item)
+        // } else if (e.target.closest("ul").id == "project-list"){
+        //     deleteProject(item)
+        // }
+        editProject(item)
+    })
+}
+
+function editProject(toEdit){
+    projModal.classList.add("open")
+    project_name.value = toEdit.id
 }
 
 function deleteTask(toRemove){
