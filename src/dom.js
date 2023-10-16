@@ -1,4 +1,4 @@
-import { selectedProject, projectArray, projectForm } from './project.js';
+import { selectedProject, projectArray } from './project.js';
 
 const openProjBtn = document.getElementById("openProjModal");
 const closeProjBtn = document.getElementById("closeProjModal");
@@ -50,11 +50,14 @@ function renderProjects(){
     projectArray.forEach(function (project) {
         const projectItem = document.createElement("li")
         projectItem.id = project.name
+        projectItem.classList.add("project")
         projectItem.innerHTML = project.name
         projectList.appendChild(projectItem);
         createDeleteBtn(projectItem)
         createEditBtn(projectItem)
     });
+    selectProject()
+
 }
 
 const projHeading = document.getElementById("selected-project")
@@ -62,7 +65,7 @@ const projHeading = document.getElementById("selected-project")
 function changeProject(project){
     projHeading.innerHTML = "Current Project: " + project.name
     selectedProject = project
-    renderTasks(selectedProject.array)
+    renderTasks(project.array)
 }
 
 function createDeleteBtn(item) {
@@ -101,6 +104,7 @@ function createEditBtn(item) {
 function editProject(toEdit){
     projModal.classList.add("open")
     project_name.value = toEdit.id
+
 }
 
 function deleteTask(toRemove){
@@ -117,5 +121,20 @@ function deleteProject(toRemove){
     renderProjects();
 }
 
+function selectProject(){
+
+    const projectList = document.querySelectorAll(".project")
+    projectList.forEach(project => {
+        project.addEventListener("click", function(e){
+            findProject(e.target.id)
+        });
+    });
+    function findProject(name){
+        let project = projectArray.find(project => project.name = name)
+        changeProject(project)
+    }
+}
+
+/// create function that uses the selected <li> from a click event and searches for the object and returns it. Perhaps use dataset, if type is project then search project array for example
 
 export {renderTasks, renderProjects, changeProject}
