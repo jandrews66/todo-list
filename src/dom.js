@@ -1,4 +1,4 @@
-import { selectedProject, projectArray } from './project.js';
+import { selectedProject, projectArray, changeProject } from './project.js';
 
 const openProjBtn = document.getElementById("openProjModal");
 const closeProjBtn = document.getElementById("closeProjModal");
@@ -26,7 +26,8 @@ closeTaskBtn.addEventListener("click", () => {
 
 const todoList = document.getElementById("todo-list")
 
-function renderTasks(project){
+function renderTasks(){
+    let project = selectedProject.array
     todoList.innerHTML = "";
     project.forEach(function (task) {
         const taskItem = document.createElement("li")
@@ -60,13 +61,6 @@ function renderProjects(){
 
 }
 
-const projHeading = document.getElementById("selected-project")
-
-function changeProject(project){
-    projHeading.innerHTML = "Current Project: " + project.name
-    selectedProject = project
-    renderTasks(project.array)
-}
 
 function createDeleteBtn(item) {
 
@@ -111,7 +105,7 @@ function deleteTask(toRemove){
 
     const index = selectedProject.array.map(e => e.title).indexOf(toRemove)
     selectedProject.array.splice(index, 1)
-    renderTasks(selectedProject.array)
+    renderTasks()
 }
 
 function deleteProject(toRemove){
@@ -135,6 +129,14 @@ function selectProject(){
     }
 }
 
+
+const projHeading = document.getElementById("selected-project")
+
+function updateProjectHeading(projectName){
+    projHeading.innerHTML = "Current Project: " + projectName
+
+}
+
 /// create function that uses the selected <li> from a click event and searches for the object and returns it. Perhaps use dataset, if type is project then search project array for example
 
-export {renderTasks, renderProjects, changeProject}
+export {renderTasks, renderProjects, updateProjectHeading}

@@ -2,7 +2,7 @@ import { selectedProject } from './project.js';
 import { renderTasks } from './dom.js'
 import { format, parseISO } from "date-fns"
 
-const taskFactory = (title, details, dueDate, priority, project) => {
+const taskFactory = (title, details, dueDate, priority) => {
 
     let task = {};
     task.title = title
@@ -15,13 +15,13 @@ const taskFactory = (title, details, dueDate, priority, project) => {
     task.dueDate = convertDate(dueDate)
     task.priority = priority
 
-    project.push(task)
+    selectedProject.array.push(task)
+    console.log(task.title + "has been added to " + selectedProject.name)
 
     return { 
         task,
         title,
-        details,
-        project
+        details
     }
 }
 
@@ -30,9 +30,9 @@ function createTasks(){
     const taskForm = document.getElementById('task-form')
     taskForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        taskFactory(task_title.value, task_details.value, due_date.value, priority.value, selectedProject.array)
+        taskFactory(task_title.value, task_details.value, due_date.value, priority.value)
         taskForm.reset();
-        renderTasks(selectedProject.array)
+        renderTasks()
     })
 
 }

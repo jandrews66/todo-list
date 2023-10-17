@@ -1,4 +1,5 @@
-import { renderProjects, changeProject } from './dom.js'
+import { renderProjects, updateProjectHeading, renderTasks } from './dom.js'
+
 
 
 const projectArray = [];
@@ -19,6 +20,14 @@ const projectFactory = (name) => {
 
     }
 }
+
+function changeProject(project){
+    selectedProject = project;
+    renderTasks()
+    updateProjectHeading(selectedProject.name)
+    return {selectedProject}
+}
+
 const projectForm = document.getElementById('project-form')
 
 function createProjects(){
@@ -39,5 +48,6 @@ export {
     selectedProject,
     createProjects,
     projectArray,
-    projectForm
+    projectForm,
+    changeProject
 }
