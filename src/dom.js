@@ -58,7 +58,6 @@ function renderTasks(){
     const todoList = document.getElementById("todo-list")
     todoList.innerHTML = "";
     let project = projModule.getProj()
-    console.log(project.array)
     project.array.forEach(function (task) {
         const taskItem = document.createElement("li")
         taskItem.id = task.title
@@ -108,7 +107,6 @@ const projModule = {
 function renderProjects(){
     const projectList = document.getElementById("project-list")
     projectList.innerHTML = "";
-
     projectArray.forEach(function (project) {
         const projectItem = document.createElement("li")
         projectItem.id = project.name
@@ -186,7 +184,7 @@ function selectProject(){
         });
     });
     function findProject(name){
-        let project = projectArray.find(project => project.name = name)
+        let project = projectArray.find(project => project.name === name)
         changeProject(project)
     }
 
