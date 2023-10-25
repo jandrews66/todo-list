@@ -1,9 +1,10 @@
 import './style.css';
-import { createTasks } from './task.js'
-import { createProjects } from './project.js';
+import { createTasks } from './dom.js'
+import { createProjects, createDefaultProj } from './dom.js';
 
 function controller(){
 
+    createDefaultProj();
     createTasks();
     createProjects();
 

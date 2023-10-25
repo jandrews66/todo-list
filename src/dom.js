@@ -1,4 +1,16 @@
-import { selectedProject, projectArray, changeProject } from './project.js';
+import { projectFactory } from './project.js';
+import { taskFactory } from './task.js'
+
+const projectArray = [];
+
+
+function createDefaultProj(){
+    const defaultProj = projectFactory("default")
+    addProjectToArray(defaultProj)
+    projModule.setProj(defaultProj);
+    updateProjectHeading(defaultProj.name)
+    renderProjects();
+}
 
 const openProjBtn = document.getElementById("openProjModal");
 const closeProjBtn = document.getElementById("closeProjModal");
@@ -24,18 +36,38 @@ closeTaskBtn.addEventListener("click", () => {
     taskModal.classList.remove("open")
 });
 
-const todoList = document.getElementById("todo-list")
+function createTasks(){
+
+    const taskForm = document.getElementById('task-form')
+    taskForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        let newTask = taskFactory(task_title.value, task_details.value, due_date.value, priority.value)
+        addTaskToProj(newTask)
+        taskForm.reset();
+    })
+
+}
+
+function addTaskToProj(task){
+    let project = projModule.getProj()
+    project.array.push(task)
+    renderTasks()
+}
 
 function renderTasks(){
-    let project = selectedProject.array
+    const todoList = document.getElementById("todo-list")
     todoList.innerHTML = "";
-    project.forEach(function (task) {
+    let project = projModule.getProj()
+    console.log(project.array)
+    project.array.forEach(function (task) {
         const taskItem = document.createElement("li")
         taskItem.id = task.title
         render(task, taskItem)
         todoList.appendChild(taskItem);
         createDeleteBtn(taskItem)
     });
+    
+
 }
 
 const render = function(obj, node){
@@ -43,9 +75,38 @@ const render = function(obj, node){
     node.innerHTML = values
 }
 
-const projectList = document.getElementById("project-list")
+function createProjects(){
+    const projectForm = document.getElementById('project-form')
+
+    projectForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        let newProj = projectFactory(project_name.value)
+        addProjectToArray(newProj)
+        changeProject(newProj)
+        projectForm.reset();
+
+    })
+
+}
+
+function addProjectToArray(proj){
+    projectArray.push(proj)
+
+}
+
+const projModule = {
+    selectedProj: '',
+    setProj: function(newProj){
+        this.selectedProj = newProj;
+    },
+    getProj: function(){
+        return this.selectedProj
+    },
+
+}
 
 function renderProjects(){
+    const projectList = document.getElementById("project-list")
     projectList.innerHTML = "";
 
     projectArray.forEach(function (project) {
@@ -57,8 +118,8 @@ function renderProjects(){
         createDeleteBtn(projectItem)
         createEditBtn(projectItem)
     });
-    selectProject()
-
+    renderTasks();
+    selectProject();
 }
 
 
@@ -104,7 +165,8 @@ function editProject(toEdit){
 function deleteTask(toRemove){
 
     const index = selectedProject.array.map(e => e.title).indexOf(toRemove)
-    selectedProject.array.splice(index, 1)
+    let project = projModule.getProj()
+    project.array.splice(index, 1)
     renderTasks()
 }
 
@@ -127,16 +189,23 @@ function selectProject(){
         let project = projectArray.find(project => project.name = name)
         changeProject(project)
     }
+
+}
+
+function changeProject(proj){
+    projModule.setProj(proj)
+    updateProjectHeading(proj.name)
+    renderProjects();
 }
 
 
-const projHeading = document.getElementById("selected-project")
-
 function updateProjectHeading(projectName){
+    const projHeading = document.getElementById("selected-project")
     projHeading.innerHTML = "Current Project: " + projectName
 
 }
 
+
 /// create function that uses the selected <li> from a click event and searches for the object and returns it. Perhaps use dataset, if type is project then search project array for example
 
-export {renderTasks, renderProjects, updateProjectHeading}
+export {createTasks, createProjects, createDefaultProj}
