@@ -18,10 +18,13 @@ const projModal = document.getElementById("projModal")
 
 openProjBtn.addEventListener("click", () => {
     projModal.classList.add("open")
+    projectForm.reset();
+
 });
 
 closeProjBtn.addEventListener("click", () => {
     projModal.classList.remove("open")
+    hideEditForm();
 });
 
 const openTaskBtn = document.getElementById("openTaskModal");
@@ -34,6 +37,7 @@ openTaskBtn.addEventListener("click", () => {
 
 closeTaskBtn.addEventListener("click", () => {
     taskModal.classList.remove("open")
+    hideEditForm();
 });
 
 function createTasks(){
@@ -64,6 +68,7 @@ function renderTasks(){
         render(task, taskItem)
         todoList.appendChild(taskItem);
         createDeleteBtn(taskItem)
+        createEditBtn(taskItem)
     });
     
 
@@ -73,9 +78,9 @@ const render = function(obj, node){
     let values = Object.values(obj)
     node.innerHTML = values
 }
+const projectForm = document.getElementById('project-form')
 
 function createProjects(){
-    const projectForm = document.getElementById('project-form')
 
     projectForm.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -145,34 +150,95 @@ function createEditBtn(item) {
     item.appendChild(editBtn)
     
     editBtn.addEventListener('click', function(e) {
-        // if (e.target.closest("ul").id == "todo-list"){
-        //     deleteTask(item)
-        // } else if (e.target.closest("ul").id == "project-list"){
-        //     deleteProject(item)
-        // }
-        editProject(item)
+        if (e.target.closest("ul").id == "todo-list"){
+            editTask(item)
+        } else if (e.target.closest("ul").id == "project-list"){
+            editProject(item)
+        }
+
     })
 }
 
+const submitBtn = document.getElementById("submit_btn")
+const editProjBtn = document.getElementById("edit_btn")
+editProjBtn.classList.add("hide-btn")
+
+
+function showEditForm(){
+    editProjBtn.classList.remove("hide-btn")
+        submitBtn.classList.add("hide-btn")
+}
+
+function hideEditForm(){
+    editProjBtn.classList.add("hide-btn")
+        submitBtn.classList.remove("hide-btn")
+}
 function editProject(toEdit){
+    showEditForm();
     projModal.classList.add("open")
     project_name.value = toEdit.id
 
+    editProjBtn.addEventListener('click', function(){
+        let proj = findProject(toEdit.id)
+        proj.name = project_name.value
+        projModal.classList.remove("open")
+        hideEditForm()
+        changeProject(proj)
+
+
+    })
+
+}
+
+const editTaskBtn = document.getElementById("edit_task_btn")
+editTaskBtn.classList.add("hide-btn")
+
+
+function editTask(toEdit){
+    showEditForm();
+    taskModal.classList.add("open")
+    let taskObj = findTask(toEdit.id)
+    task_title.value = taskObj.title
+    task_details.value = taskObj.details
+    due_date.value = taskObj.dueDate
+    priority.value = taskObj.priority
+
+    editTaskBtn.addEventListener('click', function(){
+        taskObj.title = task_title.value
+        taskObj.details = task_details.value
+        taskObj.dueDate = due_date.value
+        taskObj.priority = priority.value  
+        taskModal.classList.remove("open")
+        hideEditForm()
+        renderTasks();
+        
+    })
+
+}
+
+function findTask(title){
+    let project = projModule.getProj()
+    return project.array.find(task => task.title === title)
 }
 
 function deleteTask(toRemove){
 
-    const index = selectedProject.array.map(e => e.title).indexOf(toRemove)
     let project = projModule.getProj()
+    const index = project.array.map(e => e.title).indexOf(toRemove)
     project.array.splice(index, 1)
     renderTasks()
 }
 
 function deleteProject(toRemove){
-
-    const index = projectArray.map(e => e.title).indexOf(toRemove)
+    let proj = findProject(toRemove.id)
+    const index = projectArray.indexOf(proj)
     projectArray.splice(index, 1)
-    renderProjects();
+    let newIndex = index - 1
+    if (projectArray.length == 0){
+        changeProject("");
+    } else {
+        changeProject(projectArray[newIndex])
+    }
 }
 
 function selectProject(){
@@ -180,14 +246,18 @@ function selectProject(){
     const projectList = document.querySelectorAll(".project")
     projectList.forEach(project => {
         project.addEventListener("click", function(e){
-            findProject(e.target.id)
+            if (e.target.id == false){
+                return
+            } else { 
+                let proj = findProject(e.target.id)
+                changeProject(proj)
+            }
         });
     });
-    function findProject(name){
-        let project = projectArray.find(project => project.name === name)
-        changeProject(project)
-    }
+}
 
+function findProject(name){
+    return projectArray.find(project => project.name === name)
 }
 
 function changeProject(proj){
@@ -202,8 +272,5 @@ function updateProjectHeading(projectName){
     projHeading.innerHTML = "Current Project: " + projectName
 
 }
-
-
-/// create function that uses the selected <li> from a click event and searches for the object and returns it. Perhaps use dataset, if type is project then search project array for example
 
 export {createTasks, createProjects, createDefaultProj}

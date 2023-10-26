@@ -53,3 +53,9 @@ button:active {
     text-align: center;
     width: 380px
 }
+
+.hide-btn {
+    opacity: 0;
+    display: none;
+    cursor: default;
+}
