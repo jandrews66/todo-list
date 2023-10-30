@@ -1,8 +1,24 @@
 import { projectFactory } from './project.js';
 import { taskFactory } from './task.js'
 
-const projectArray = [];
+let projectArray = [];
 
+function init(){
+    if (!localStorage.getItem("storedData")){
+        // if theres no local storage then create a Default project 
+        createDefaultProj();
+    } else {
+        projectArray = JSON.parse(localStorage.getItem("storedData"))
+        //use changeProject to set the selected project to the first project in the stored projectArray
+        changeProject(projectArray[0])
+    }
+    createTasks();
+    createProjects();
+}
+
+function populateStorage(){
+    localStorage.setItem("storedData", JSON.stringify(projectArray))
+}
 
 function createDefaultProj(){
     const defaultProj = projectFactory("default")
@@ -33,6 +49,8 @@ const taskModal = document.getElementById("taskModal")
 
 openTaskBtn.addEventListener("click", () => {
     taskModal.classList.add("open")
+    taskForm.reset();
+
 });
 
 closeTaskBtn.addEventListener("click", () => {
@@ -40,9 +58,10 @@ closeTaskBtn.addEventListener("click", () => {
     hideEditForm();
 });
 
+const taskForm = document.getElementById('task-form')
+
 function createTasks(){
 
-    const taskForm = document.getElementById('task-form')
     taskForm.addEventListener("submit", (e) => {
         e.preventDefault();
         let newTask = taskFactory(task_title.value, task_details.value, due_date.value, priority.value)
@@ -56,6 +75,7 @@ function addTaskToProj(task){
     let project = projModule.getProj()
     project.array.push(task)
     renderTasks()
+    populateStorage()
 }
 
 function renderTasks(){
@@ -88,13 +108,13 @@ function createProjects(){
         addProjectToArray(newProj)
         changeProject(newProj)
         projectForm.reset();
-
     })
 
 }
 
 function addProjectToArray(proj){
     projectArray.push(proj)
+    populateStorage()
 
 }
 
@@ -158,20 +178,25 @@ function createEditBtn(item) {
 
     })
 }
-
-const submitBtn = document.getElementById("submit_btn")
-const editProjBtn = document.getElementById("edit_btn")
+const submitProjBtn = document.getElementById("submit_proj_btn")
+const editProjBtn = document.getElementById("edit_proj_btn")
 editProjBtn.classList.add("hide-btn")
-
+const submitTaskBtn = document.getElementById("submit_task_btn")
+const editTaskBtn = document.getElementById("edit_task_btn")
+editTaskBtn.classList.add("hide-btn")
 
 function showEditForm(){
     editProjBtn.classList.remove("hide-btn")
-        submitBtn.classList.add("hide-btn")
+    editTaskBtn.classList.remove("hide-btn")
+    submitProjBtn.classList.add("hide-btn")
+    submitTaskBtn.classList.add("hide-btn")
 }
 
 function hideEditForm(){
     editProjBtn.classList.add("hide-btn")
-        submitBtn.classList.remove("hide-btn")
+    editTaskBtn.classList.add("hide-btn")
+    submitProjBtn.classList.remove("hide-btn")
+    submitTaskBtn.classList.remove("hide-btn")
 }
 function editProject(toEdit){
     showEditForm();
@@ -184,15 +209,10 @@ function editProject(toEdit){
         projModal.classList.remove("open")
         hideEditForm()
         changeProject(proj)
-
-
+        populateStorage()
     })
 
 }
-
-const editTaskBtn = document.getElementById("edit_task_btn")
-editTaskBtn.classList.add("hide-btn")
-
 
 function editTask(toEdit){
     showEditForm();
@@ -211,7 +231,7 @@ function editTask(toEdit){
         taskModal.classList.remove("open")
         hideEditForm()
         renderTasks();
-        
+        populateStorage()
     })
 
 }
@@ -227,12 +247,14 @@ function deleteTask(toRemove){
     const index = project.array.map(e => e.title).indexOf(toRemove)
     project.array.splice(index, 1)
     renderTasks()
+    populateStorage()
 }
 
 function deleteProject(toRemove){
     let proj = findProject(toRemove.id)
     const index = projectArray.indexOf(proj)
     projectArray.splice(index, 1)
+    populateStorage();
     let newIndex = index - 1
     if (projectArray.length == 0){
         changeProject("");
@@ -273,4 +295,4 @@ function updateProjectHeading(projectName){
 
 }
 
-export {createTasks, createProjects, createDefaultProj}
+export {createTasks, createProjects, createDefaultProj, init}
