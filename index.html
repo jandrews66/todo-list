@@ -13,12 +13,14 @@
     </div>
     <div id="content">
         <div id="project-menu">
-            <h2>Projects:</h2>
-            <h3 id="selected-project"></h3>
+            <h2>Projects</h2>
             <ul id="project-list"></ul>
             <button id="openProjModal">Create Project</button>
+
             <div class="modal" id="projModal">
                 <div class="modal-inner">
+                    <img id="closeProjModal" src="../src/imgs/circle-xmark.svg"></img>
+
                     <form id="project-form">
                         <ul>
                             <li>
@@ -29,21 +31,21 @@
                                 <button type="submit" id="submit_proj_btn">Create</button>
                             </li>
                             <li>
-                                <button type="button" id="edit_proj_btn" >Edit</button>
+                                <button type="button" id="edit_proj_btn" >Update</button>
                             </li>
                         </ul>
             
                     </form>  
-                    <button id="closeProjModal">Close</button>
                 </div>
             </div>
         </div>
         <div id="task-content">
-            <h2>Tasks:</h2>
+            <h2>Tasks</h2>
             <ul id="todo-list"></ul>
-            <button id="openTaskModal">Create Task</button>
+            <button id="openTaskModal">Add Task</button>
             <div class="modal" id="taskModal">
                 <div class="modal-inner">
+                    <img id="closeTaskModal" src="../src/imgs/circle-xmark.svg"></img>
                     <form id="task-form">
                         <ul>
                             <li>
@@ -67,14 +69,13 @@
                                 </select>
                             </li>
                             <li>
-                                <button type="submit" id="submit_task_btn" >Create</button>
+                                <button type="submit" id="submit_task_btn" >Add</button>
                             </li>
                             <li>
-                                <button type="button" id="edit_task_btn" >Edit</button>
+                                <button type="button" id="edit_task_btn" >Update</button>
                             </li>
                         </ul>
                     </form>
-                    <button id="closeTaskModal">Close</button>
                 </div>
             </div>
         </div>
