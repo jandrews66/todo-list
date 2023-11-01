@@ -1,5 +1,7 @@
 import { projectFactory } from './project.js';
 import { taskFactory } from './task.js'
+import { format, parseISO } from "date-fns"
+
 
 let projectArray = [];
 
@@ -23,9 +25,9 @@ function populateStorage(){
 function createDefaultProj(){
     const defaultProj = projectFactory("default")
     addProjectToArray(defaultProj)
-    projModule.setProj(defaultProj);
-    updateProjectHeading(defaultProj.name)
-    renderProjects();
+    changeProject(defaultProj)
+    displaySelectedProj();
+
 }
 
 const openProjBtn = document.getElementById("openProjModal");
@@ -67,6 +69,7 @@ function createTasks(){
         let newTask = taskFactory(task_title.value, task_details.value, due_date.value, priority.value)
         addTaskToProj(newTask)
         taskForm.reset();
+        taskModal.classList.remove("open")
     })
 
 }
@@ -82,6 +85,9 @@ function renderTasks(){
     const todoList = document.getElementById("todo-list")
     todoList.innerHTML = "";
     let project = projModule.getProj()
+    if (project.array.length == 0){
+        return
+    }
     project.array.forEach(function (task) {
         const taskItem = document.createElement("li")
         taskItem.id = task.title
@@ -98,6 +104,11 @@ const render = function(obj, node){
     const p = document.createElement('p')
     p.innerHTML = obj.title
     node.appendChild(p)
+
+    const span = document.createElement('span')
+    span.innerHTML = convertDate(obj.dueDate)
+    node.appendChild(span)
+    
     const starIcon = document.createElement('img')
     starIcon.setAttribute('src', '../src/imgs/star.svg')
     node.appendChild(starIcon)
@@ -111,7 +122,6 @@ const render = function(obj, node){
     }
 }
 
-
 const projectForm = document.getElementById('project-form')
 
 function createProjects(){
@@ -122,6 +132,8 @@ function createProjects(){
         addProjectToArray(newProj)
         changeProject(newProj)
         projectForm.reset();
+        projModal.classList.remove("open")
+
     })
 
 }
@@ -146,6 +158,10 @@ const projModule = {
 function renderProjects(){
     const projectList = document.getElementById("project-list")
     projectList.innerHTML = "";
+    if (projectArray.length == 0){
+        return
+    }
+
     projectArray.forEach(function (project) {
         const projectItem = document.createElement("li")
         projectItem.id = project.name
@@ -309,5 +325,10 @@ function displaySelectedProj(){
     projLi.classList.add("selProj")
 }
 
+//change dueDate format - e.g, 08-Mar
+const convertDate = function(dateString){
+    const date = (format(parseISO(dateString), "dd-MMM"));
+    return date
+}
 
 export {createTasks, createProjects, createDefaultProj, init}
