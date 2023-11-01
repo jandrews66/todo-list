@@ -1,8 +1,30 @@
-*{
+* {
     margin: 5px;
     padding: 0;
 }
 
+
+#content {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    padding: 20px;
+
+}
+
+#project-menu {
+    grid-column: 1 / 2;
+    display: grid;
+    background-color: rgb(195, 195, 195);
+    padding: 20px;
+}
+
+#task-content {
+    grid-column: 2 / 3;
+    display: grid;
+    padding: 20px;
+    background-color: rgb(206, 226, 226);
+
+}
 h1 {
     color:red;
 }
@@ -11,6 +33,14 @@ ul {
     list-style-type: none;
 }
 
+li {
+    display: flex;
+    align-content: center;
+}
+
+li > p {
+    margin-right: auto;
+}
 button {
     border-radius: 20px;
     border: 0;
@@ -19,6 +49,8 @@ button {
     cursor: pointer;
     padding: 5px 10px;
     margin: 10px 0 10px 0;
+    max-width: fit-content;
+    max-height: fit-content;
 }
 
 button:active {
@@ -58,4 +90,26 @@ button:active {
     opacity: 0;
     display: none;
     cursor: default;
+}
+
+img[src$='.svg']{
+    width: 15px;
+    cursor: pointer;
+
+}
+
+.low {
+    filter: invert(86%) sepia(5%) saturate(5889%) hue-rotate(59deg) brightness(80%) contrast(74%);
+}
+
+.medium {
+    filter: invert(80%) sepia(53%) saturate(5948%) hue-rotate(352deg) brightness(94%) contrast(100%);
+}
+
+.high {
+    filter: invert(35%) sepia(5%) saturate(6885%) hue-rotate(314deg) brightness(117%) contrast(128%);
+}
+
+.selProj {
+    text-decoration: underline;
 }

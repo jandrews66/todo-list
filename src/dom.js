@@ -87,17 +87,31 @@ function renderTasks(){
         taskItem.id = task.title
         render(task, taskItem)
         todoList.appendChild(taskItem);
-        createDeleteBtn(taskItem)
         createEditBtn(taskItem)
+        createDeleteBtn(taskItem)
+
     });
-    
 
 }
 
 const render = function(obj, node){
-    let values = Object.values(obj)
-    node.innerHTML = values
+    const p = document.createElement('p')
+    p.innerHTML = obj.title
+    node.appendChild(p)
+    const starIcon = document.createElement('img')
+    starIcon.setAttribute('src', '../src/imgs/star.svg')
+    node.appendChild(starIcon)
+
+    if (obj.priority == "Low"){
+        starIcon.classList.add("low")
+    } else if (obj.priority == "Medium"){
+        starIcon.classList.add("medium")
+    } else if (obj.priority == "High"){
+        starIcon.classList.add("high")
+    }
 }
+
+
 const projectForm = document.getElementById('project-form')
 
 function createProjects(){
@@ -136,24 +150,28 @@ function renderProjects(){
         const projectItem = document.createElement("li")
         projectItem.id = project.name
         projectItem.classList.add("project")
-        projectItem.innerHTML = project.name
         projectList.appendChild(projectItem);
-        createDeleteBtn(projectItem)
+        const p = document.createElement('p')
+        p.innerHTML = project.name
+        projectItem.appendChild(p)
         createEditBtn(projectItem)
+        createDeleteBtn(projectItem)
+
     });
     renderTasks();
+    displaySelectedProj()
     selectProject();
 }
 
 
 function createDeleteBtn(item) {
 
-    const removeBtn = document.createElement("button")
-    removeBtn.innerHTML = "Remove"
-    removeBtn.classList.add("remove-btn")
-    item.appendChild(removeBtn)
-    
-    removeBtn.addEventListener('click', function(e) {
+    const deleteIcon = document.createElement('img')
+    deleteIcon.setAttribute('src', '../src/imgs/cross.svg')
+    item.appendChild(deleteIcon)
+
+
+    deleteIcon.addEventListener('click', function(e) {
         if (e.target.closest("ul").id == "todo-list"){
             deleteTask(item)
         } else if (e.target.closest("ul").id == "project-list"){
@@ -164,20 +182,19 @@ function createDeleteBtn(item) {
 
 function createEditBtn(item) {
 
-    const editBtn = document.createElement("button")
-    editBtn.innerHTML = "Edit"
-    editBtn.classList.add("edit-btn")
-    item.appendChild(editBtn)
-    
-    editBtn.addEventListener('click', function(e) {
+    const editIcon = document.createElement('img')
+    editIcon.setAttribute('src', '../src/imgs/edit.svg')
+    item.appendChild(editIcon)
+
+    editIcon.addEventListener('click', function(e) {
         if (e.target.closest("ul").id == "todo-list"){
             editTask(item)
         } else if (e.target.closest("ul").id == "project-list"){
             editProject(item)
         }
-
     })
 }
+
 const submitProjBtn = document.getElementById("submit_proj_btn")
 const editProjBtn = document.getElementById("edit_proj_btn")
 editProjBtn.classList.add("hide-btn")
@@ -268,11 +285,10 @@ function selectProject(){
     const projectList = document.querySelectorAll(".project")
     projectList.forEach(project => {
         project.addEventListener("click", function(e){
-            if (e.target.id == false){
+            if (findProject(e.target.innerHTML) == undefined){
                 return
-            } else { 
-                let proj = findProject(e.target.id)
-                changeProject(proj)
+            } else {
+                changeProject(findProject(e.target.innerHTML))
             }
         });
     });
@@ -284,15 +300,14 @@ function findProject(name){
 
 function changeProject(proj){
     projModule.setProj(proj)
-    updateProjectHeading(proj.name)
-    renderProjects();
+    renderProjects();    
 }
 
-
-function updateProjectHeading(projectName){
-    const projHeading = document.getElementById("selected-project")
-    projHeading.innerHTML = "Current Project: " + projectName
-
+function displaySelectedProj(){
+    let project = projModule.getProj();
+    let projLi = document.getElementById(project.name)
+    projLi.classList.add("selProj")
 }
+
 
 export {createTasks, createProjects, createDefaultProj, init}
