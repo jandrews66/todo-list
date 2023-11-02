@@ -2,7 +2,6 @@ import { projectFactory } from './project.js';
 import { taskFactory } from './task.js'
 import { format, parseISO } from "date-fns"
 
-
 let projectArray = [];
 
 function init(){
@@ -30,96 +29,46 @@ function createDefaultProj(){
 
 }
 
-const openProjBtn = document.getElementById("openProjModal");
-const closeProjBtn = document.getElementById("closeProjModal");
-const projModal = document.getElementById("projModal")
-
-openProjBtn.addEventListener("click", () => {
-    projModal.classList.add("open")
-    projectForm.reset();
-
-});
-
-closeProjBtn.addEventListener("click", () => {
-    projModal.classList.remove("open")
-    hideEditForm();
-});
-
-const openTaskBtn = document.getElementById("openTaskModal");
-const closeTaskBtn = document.getElementById("closeTaskModal");
-const taskModal = document.getElementById("taskModal")
-
-openTaskBtn.addEventListener("click", () => {
-    taskModal.classList.add("open")
-    taskForm.reset();
-
-});
-
-closeTaskBtn.addEventListener("click", () => {
-    taskModal.classList.remove("open")
-    hideEditForm();
-});
-
-const taskForm = document.getElementById('task-form')
-
-function createTasks(){
-
-    taskForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        let newTask = taskFactory(task_title.value, task_details.value, due_date.value, priority.value)
-        addTaskToProj(newTask)
-        taskForm.reset();
-        taskModal.classList.remove("open")
-    })
-
-}
-
-function addTaskToProj(task){
-    let project = projModule.getProj()
-    project.array.push(task)
-    renderTasks()
-    populateStorage()
-}
-
-function renderTasks(){
-    const todoList = document.getElementById("todo-list")
-    todoList.innerHTML = "";
-    let project = projModule.getProj()
-    if (project.array.length == 0){
-        return
+function deleteProject(toRemove){
+    let proj = findProject(toRemove.id)
+    const index = projectArray.indexOf(proj)
+    projectArray.splice(index, 1)
+    populateStorage();
+    let newIndex = index - 1
+    if (projectArray.length == 0){
+        changeProject("");
+    } else {
+        changeProject(projectArray[newIndex])
     }
-    project.array.forEach(function (task) {
-        const taskItem = document.createElement("li")
-        taskItem.id = task.title
-        render(task, taskItem)
-        todoList.appendChild(taskItem);
-        createEditBtn(taskItem)
-        createDeleteBtn(taskItem)
+}
 
+function selectProject(){
+
+    const projectList = document.querySelectorAll(".project")
+    projectList.forEach(project => {
+        project.addEventListener("click", function(e){
+            if (findProject(e.target.innerHTML) == undefined){
+                return
+            } else {
+                changeProject(findProject(e.target.innerHTML))
+            }
+        });
     });
-
 }
 
-const render = function(obj, node){
-    const p = document.createElement('p')
-    p.innerHTML = obj.title
-    node.appendChild(p)
+function findProject(name){
+    return projectArray.find(project => project.name === name)
+}
 
-    const span = document.createElement('span')
-    span.innerHTML = convertDate(obj.dueDate)
-    node.appendChild(span)
-    
-    const starIcon = document.createElement('img')
-    starIcon.setAttribute('src', '../src/imgs/star.svg')
-    node.appendChild(starIcon)
+function changeProject(proj){
+    projModule.setProj(proj)
+    renderProjects();    
+}
 
-    if (obj.priority == "Low"){
-        starIcon.classList.add("low")
-    } else if (obj.priority == "Medium"){
-        starIcon.classList.add("medium")
-    } else if (obj.priority == "High"){
-        starIcon.classList.add("high")
-    }
+function displaySelectedProj(){
+    let project = projModule.getProj();
+    let projLi = document.getElementById(project.name)
+    projLi.classList.add("selProj")
 }
 
 const projectForm = document.getElementById('project-form')
@@ -179,6 +128,102 @@ function renderProjects(){
     selectProject();
 }
 
+function editProject(toEdit){
+    showEditForm();
+    projModal.classList.add("open")
+    project_name.value = toEdit.id
+
+    editProjBtn.addEventListener('click', function(){
+        let proj = findProject(toEdit.id)
+        proj.name = project_name.value
+        projModal.classList.remove("open")
+        hideEditForm()
+        changeProject(proj)
+        populateStorage()
+    })
+
+}
+
+const taskForm = document.getElementById('task-form')
+
+function createTasks(){
+
+    taskForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        let newTask = taskFactory(task_title.value, task_details.value, due_date.value, priority.value)
+        addTaskToProj(newTask)
+        taskForm.reset();
+        taskModal.classList.remove("open")
+    })
+
+}
+
+function addTaskToProj(task){
+    let project = projModule.getProj()
+    project.array.push(task)
+    renderTasks()
+    populateStorage()
+}
+
+function renderTasks(){
+    const todoList = document.getElementById("todo-list")
+    todoList.innerHTML = "";
+    let project = projModule.getProj()
+    if (project.array.length == 0){
+        return
+    }
+    project.array.forEach(function (task) {
+        const taskItem = document.createElement("li")
+        taskItem.id = task.title
+        render(task, taskItem)
+        todoList.appendChild(taskItem);
+        createEditBtn(taskItem)
+        createDeleteBtn(taskItem)
+
+    });
+    checkboxEvent()
+}
+
+const render = function(obj, node){
+    const checkbox = document.createElement('input')
+    checkbox.type = "checkbox";
+    checkbox.id = "checkbox"
+    node.appendChild(checkbox)
+
+    const p = document.createElement('p')
+    p.innerHTML = obj.title
+    node.appendChild(p)
+
+    const span = document.createElement('span')
+    span.innerHTML = convertDate(obj.dueDate)
+    node.appendChild(span)
+    
+    const starIcon = document.createElement('img')
+    starIcon.setAttribute('src', '../src/imgs/star.svg')
+    node.appendChild(starIcon)
+
+    if (obj.priority == "Low"){
+        starIcon.classList.add("low")
+    } else if (obj.priority == "Medium"){
+        starIcon.classList.add("medium")
+    } else if (obj.priority == "High"){
+        starIcon.classList.add("high")
+    }
+}
+
+function checkboxEvent() {
+    const checkbox = document.getElementById("checkbox");
+
+    checkbox.addEventListener('change', function() {
+    if (this.checked) {
+        this.parentNode.classList.add("strikethrough")
+        
+    } else {
+        this.parentNode.classList.remove("strikethrough")
+
+        }
+    });
+}
 
 function createDeleteBtn(item) {
 
@@ -209,42 +254,6 @@ function createEditBtn(item) {
             editProject(item)
         }
     })
-}
-
-const submitProjBtn = document.getElementById("submit_proj_btn")
-const editProjBtn = document.getElementById("edit_proj_btn")
-editProjBtn.classList.add("hide-btn")
-const submitTaskBtn = document.getElementById("submit_task_btn")
-const editTaskBtn = document.getElementById("edit_task_btn")
-editTaskBtn.classList.add("hide-btn")
-
-function showEditForm(){
-    editProjBtn.classList.remove("hide-btn")
-    editTaskBtn.classList.remove("hide-btn")
-    submitProjBtn.classList.add("hide-btn")
-    submitTaskBtn.classList.add("hide-btn")
-}
-
-function hideEditForm(){
-    editProjBtn.classList.add("hide-btn")
-    editTaskBtn.classList.add("hide-btn")
-    submitProjBtn.classList.remove("hide-btn")
-    submitTaskBtn.classList.remove("hide-btn")
-}
-function editProject(toEdit){
-    showEditForm();
-    projModal.classList.add("open")
-    project_name.value = toEdit.id
-
-    editProjBtn.addEventListener('click', function(){
-        let proj = findProject(toEdit.id)
-        proj.name = project_name.value
-        projModal.classList.remove("open")
-        hideEditForm()
-        changeProject(proj)
-        populateStorage()
-    })
-
 }
 
 function editTask(toEdit){
@@ -283,52 +292,63 @@ function deleteTask(toRemove){
     populateStorage()
 }
 
-function deleteProject(toRemove){
-    let proj = findProject(toRemove.id)
-    const index = projectArray.indexOf(proj)
-    projectArray.splice(index, 1)
-    populateStorage();
-    let newIndex = index - 1
-    if (projectArray.length == 0){
-        changeProject("");
-    } else {
-        changeProject(projectArray[newIndex])
-    }
-}
 
-function selectProject(){
-
-    const projectList = document.querySelectorAll(".project")
-    projectList.forEach(project => {
-        project.addEventListener("click", function(e){
-            if (findProject(e.target.innerHTML) == undefined){
-                return
-            } else {
-                changeProject(findProject(e.target.innerHTML))
-            }
-        });
-    });
-}
-
-function findProject(name){
-    return projectArray.find(project => project.name === name)
-}
-
-function changeProject(proj){
-    projModule.setProj(proj)
-    renderProjects();    
-}
-
-function displaySelectedProj(){
-    let project = projModule.getProj();
-    let projLi = document.getElementById(project.name)
-    projLi.classList.add("selProj")
-}
 
 //change dueDate format - e.g, 08-Mar
 const convertDate = function(dateString){
     const date = (format(parseISO(dateString), "dd-MMM"));
     return date
 }
+
+const submitProjBtn = document.getElementById("submit_proj_btn")
+const editProjBtn = document.getElementById("edit_proj_btn")
+editProjBtn.classList.add("hide-btn")
+const submitTaskBtn = document.getElementById("submit_task_btn")
+const editTaskBtn = document.getElementById("edit_task_btn")
+editTaskBtn.classList.add("hide-btn")
+
+function showEditForm(){
+    editProjBtn.classList.remove("hide-btn")
+    editTaskBtn.classList.remove("hide-btn")
+    submitProjBtn.classList.add("hide-btn")
+    submitTaskBtn.classList.add("hide-btn")
+}
+
+function hideEditForm(){
+    editProjBtn.classList.add("hide-btn")
+    editTaskBtn.classList.add("hide-btn")
+    submitProjBtn.classList.remove("hide-btn")
+    submitTaskBtn.classList.remove("hide-btn")
+}
+
+const openProjBtn = document.getElementById("openProjModal");
+const closeProjBtn = document.getElementById("closeProjModal");
+const projModal = document.getElementById("projModal")
+
+openProjBtn.addEventListener("click", () => {
+    projModal.classList.add("open")
+    projectForm.reset();
+
+});
+
+closeProjBtn.addEventListener("click", () => {
+    projModal.classList.remove("open")
+    hideEditForm();
+});
+
+const openTaskBtn = document.getElementById("openTaskModal");
+const closeTaskBtn = document.getElementById("closeTaskModal");
+const taskModal = document.getElementById("taskModal")
+
+openTaskBtn.addEventListener("click", () => {
+    taskModal.classList.add("open")
+    taskForm.reset();
+
+});
+
+closeTaskBtn.addEventListener("click", () => {
+    taskModal.classList.remove("open")
+    hideEditForm();
+});
 
 export {createTasks, createProjects, createDefaultProj, init}
