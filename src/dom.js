@@ -198,8 +198,8 @@ const render = function(obj, node){
     span.innerHTML = convertDate(obj.dueDate)
     node.appendChild(span)
     
-    const starIcon = document.createElement('img')
-    starIcon.setAttribute('src', '../src/imgs/star.svg')
+    const starIcon = document.createElement('i')
+    starIcon.classList.add('fi-sr-star')
     node.appendChild(starIcon)
 
     if (obj.priority == "Low"){
@@ -227,8 +227,9 @@ function checkboxEvent() {
 
 function createDeleteBtn(item) {
 
-    const deleteIcon = document.createElement('img')
-    deleteIcon.setAttribute('src', '../src/imgs/cross.svg')
+    const deleteIcon = document.createElement('i')
+    deleteIcon.classList.add("fi-br-cross")
+    //deleteIcon.setAttribute('src', '../src/imgs/cross.svg')
     item.appendChild(deleteIcon)
 
 
@@ -243,8 +244,8 @@ function createDeleteBtn(item) {
 
 function createEditBtn(item) {
 
-    const editIcon = document.createElement('img')
-    editIcon.setAttribute('src', '../src/imgs/edit.svg')
+    const editIcon = document.createElement('i')
+    editIcon.classList.add("fi-rr-edit")
     item.appendChild(editIcon)
 
     editIcon.addEventListener('click', function(e) {

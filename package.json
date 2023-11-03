@@ -24,6 +24,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "@flaticon/flaticon-uicons": "^3.0.0",
     "date-fns": "^2.30.0"
   }
 }
