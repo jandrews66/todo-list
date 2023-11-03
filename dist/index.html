@@ -1,85 +1,98 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>To Do List</title>
     <script src="main.js" defer></script>
-</head>
-<body>
+  </head>
+  <body>
     <div id="header">
-        <h1>Todo List</h1>
+      <h1>Todo List</h1>
     </div>
     <div id="content">
-        <div id="project-menu">
-            <h2>Projects</h2>
-            <ul id="project-list"></ul>
-            <button id="openProjModal">Create Project</button>
+      <div id="project-menu">
+        <h2>Projects</h2>
+        <ul id="project-list"></ul>
+        <button id="openProjModal">Create Project</button>
 
-            <div class="modal" id="projModal">
-                <div class="modal-inner">
-                    <i id="closeProjModal" class="fi fi-rr-cross-circle"></i>
+        <div class="modal" id="projModal">
+          <div class="modal-inner">
+            <i id="closeProjModal" class="fi fi-rr-cross-circle"></i>
 
-                    <form id="project-form">
-                        <ul>
-                            <li>
-                                <label for="project_name">Project Name: </label>
-                                <input type="text" id="project_name" name="project_name" required>
-                            </li>
-                            <li>
-                                <button type="submit" id="submit_proj_btn">Create</button>
-                            </li>
-                            <li>
-                                <button type="button" id="edit_proj_btn" >Update</button>
-                            </li>
-                        </ul>
-            
-                    </form>  
-                </div>
-            </div>
+            <form id="project-form">
+              <ul>
+                <li>
+                  <label for="project_name">Project Name: </label>
+                  <input
+                    type="text"
+                    id="project_name"
+                    name="project_name"
+                    required
+                  />
+                </li>
+                <li>
+                  <button type="submit" id="submit_proj_btn">Create</button>
+                </li>
+                <li>
+                  <button type="button" id="edit_proj_btn">Update</button>
+                </li>
+              </ul>
+            </form>
+          </div>
         </div>
-        <div id="task-content">
-            <h2>Tasks</h2>
-            <ul id="todo-list"></ul>
-            <button id="openTaskModal">Add Task</button>
-            <div class="modal" id="taskModal">
-                <div class="modal-inner">
-                    <i id="closeTaskModal" class="fi fi-rr-cross-circle"></i>
-                    <form id="task-form">
-                        <ul>
-                            <li>
-                                <label for="task_title">Task: </label>
-                                <input type="text" id="task_title" name="task_title" required>
-                            </li>
-                            <li>
-                                <label for="task_details">Details: </label>
-                                <input type="text" id="task_details" name="task_details" required>
-                            </li>
-                            <li>
-                                <label for="due_date">Due Date: </label>
-                                <input type="date" id="due_date" name="due_date" required>
-                            </li>
-                            <li>
-                                <label for="priority">Priority: </label>
-                                <select id="priority" name="priority">
-                                    <option value="Low">Low</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="High">High</option>
-                                </select>
-                            </li>
-                            <li>
-                                <button type="submit" id="submit_task_btn" >Add</button>
-                            </li>
-                            <li>
-                                <button type="button" id="edit_task_btn" >Update</button>
-                            </li>
-                        </ul>
-                    </form>
-                </div>
-            </div>
+      </div>
+      <div id="task-content">
+        <h2>Tasks</h2>
+        <ul id="todo-list"></ul>
+        <button id="openTaskModal">Add Task</button>
+        <div class="modal" id="taskModal">
+          <div class="modal-inner">
+            <i id="closeTaskModal" class="fi fi-rr-cross-circle"></i>
+            <form id="task-form">
+              <ul>
+                <li>
+                  <label for="task_title">Task: </label>
+                  <input
+                    type="text"
+                    id="task_title"
+                    name="task_title"
+                    required
+                  />
+                </li>
+                <li>
+                  <label for="task_details">Details: </label>
+                  <input
+                    type="text"
+                    id="task_details"
+                    name="task_details"
+                    required
+                  />
+                </li>
+                <li>
+                  <label for="due_date">Due Date: </label>
+                  <input type="date" id="due_date" name="due_date" required />
+                </li>
+                <li>
+                  <label for="priority">Priority: </label>
+                  <select id="priority" name="priority">
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                  </select>
+                </li>
+                <li>
+                  <button type="submit" id="submit_task_btn">Add</button>
+                </li>
+                <li>
+                  <button type="button" id="edit_task_btn">Update</button>
+                </li>
+              </ul>
+            </form>
+          </div>
         </div>
-
+      </div>
     </div>
-</body>
+  </body>
 </html>
